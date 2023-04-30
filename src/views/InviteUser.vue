@@ -20,10 +20,12 @@
         </div>
       </div>
       <div class="invite-user__content">
-        test
+        <InviteUserMainInfo v-if="activeStep == 1"/>
+        <InviteUserAvailableLocations v-else-if="activeStep == 2"/>
+        <InviteUserRoles v-else/>
       </div>
       <div class="invite-user__footer">
-        <v-toggle-switch v-if="activeStep==1">Active in all companies<img class="icon" src="@/assets/images/info.svg" alt="info"></v-toggle-switch>
+        <v-toggle-switch name="activeAllCompanies" v-if="activeStep==1">Active in all companies<img class="icon-info" src="@/assets/images/info.svg" alt="info"></v-toggle-switch>
         <v-button>
             <span v-if="activeStep == 3">Invite User</span>
             <span v-else>Next Step</span>
@@ -33,10 +35,40 @@
 </template>
 
 <script>
+    import InviteUserMainInfo from '@/components/InviteUser/InviteUserMainInfo';
+    import InviteUserAvailableLocations from '@/components/InviteUser/InviteUserAvailableLocations';
+    import InviteUserRoles from '@/components/InviteUser/InviteUserRoles';
     export default {
         name: 'InviteUser',
         data(){
             return{
+                formInviteUser:{
+                    user: {
+                        mainInfo:{
+                            firstName: '',
+                            lastName: '',
+                            emailAddress: '',
+                            phoneNumber: '',
+                            position: '',
+                            availableInCompany: '',
+                            activeAllCompanies: false,
+                        },
+                        availableLocations:{
+                            mainLocation: '',
+                            locationAll: false,
+                            locations: []
+                        },
+                        roles:{
+                            access: {
+                                viewOnly:[],
+                                create: [],
+                                approve: [],
+                                pay: [],
+                            },
+                            management: []
+                        }
+                    }
+                },
                 activeStep: 1,
                 steps: [
                     {
@@ -57,6 +89,7 @@
                 ]
             }
         },
+        components:{InviteUserMainInfo, InviteUserAvailableLocations, InviteUserRoles},
         methods:{
             changeStep(num){
                 this.activeStep = num;
@@ -68,6 +101,7 @@
 <style lang="scss" scoped>
     .invite-user{
         padding: 24px;
+        max-width: 1000px;
         background-color: $color-white;
         box-shadow: 0px 8px 16px rgba(#363E71, 0.24);
         border-radius: 16px;
@@ -141,6 +175,9 @@
                 }
             }
         }
+        .invite-user__content{
+            padding: 24px 0px 32px;
+        }
         .invite-user__footer{
             display: flex;
             align-items: center;
@@ -153,7 +190,7 @@
               
             }
             .v-toggle-switch{
-                .icon{
+                .icon-info{
                     margin-left: 8px;
                 }
             }

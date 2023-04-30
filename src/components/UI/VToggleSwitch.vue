@@ -12,7 +12,11 @@
         props: {
             label:{   
                 type: String,
-                default: '',
+                default: null,
+            },
+            name: {
+                type: String,
+                default: null,
             },
         },
         

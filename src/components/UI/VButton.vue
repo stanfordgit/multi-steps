@@ -10,7 +10,7 @@
         props: {
             type:{   
                 type: String,
-                default: '',
+                default: null,
             },
         },
     }
