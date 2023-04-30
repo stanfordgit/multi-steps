@@ -20,14 +20,21 @@
         </div>
       </div>
       <div class="invite-user__content">
-        <InviteUserMainInfo v-if="activeStep == 1"/>
-        <InviteUserAvailableLocations v-else-if="activeStep == 2"/>
-        <InviteUserRoles v-else/>
+        <InviteUserMainInfo :formDisabled="isFormDisabled" v-if="activeStep == 1"/>
+        <InviteUserAvailableLocations :formDisabled="isFormDisabled" v-else-if="activeStep == 2"/>
+        <InviteUserRoles :formDisabled="isFormDisabled" v-else/>
       </div>
       <div class="invite-user__footer">
-        <v-toggle-switch name="activeAllCompanies" v-if="activeStep==1">Active in all companies<img class="icon-info" src="@/assets/images/info.svg" alt="info"></v-toggle-switch>
-        <v-button>
+        <div class="h-toggle-switch" v-if="activeStep == 1">
+            <label class="toggle-switch">
+                <input type="checkbox" v-model="checkedAllCompanies" :disabled="isFormDisabled" @change="setMainInfoAllCompanies($event.target.checked)">
+                <span class="slider"></span>
+                <span class="label">Active in all companies<img class="icon-info" src="@/assets/images/info.svg" alt="info"></span>
+            </label>
+        </div>
+        <v-button class="nextStep" :disabled="isFormDisabled" @click="nextStep">
             <span v-if="activeStep == 3">Invite User</span>
+            <span v-else-if="activeStep==4">...</span>
             <span v-else>Next Step</span>
         </v-button>
       </div>
@@ -38,37 +45,13 @@
     import InviteUserMainInfo from '@/components/InviteUser/InviteUserMainInfo';
     import InviteUserAvailableLocations from '@/components/InviteUser/InviteUserAvailableLocations';
     import InviteUserRoles from '@/components/InviteUser/InviteUserRoles';
+    import { mapMutations, mapGetters } from 'vuex';
     export default {
         name: 'InviteUser',
         data(){
             return{
-                formInviteUser:{
-                    user: {
-                        mainInfo:{
-                            firstName: '',
-                            lastName: '',
-                            emailAddress: '',
-                            phoneNumber: '',
-                            position: '',
-                            availableInCompany: '',
-                            activeAllCompanies: false,
-                        },
-                        availableLocations:{
-                            mainLocation: '',
-                            locationAll: false,
-                            locations: []
-                        },
-                        roles:{
-                            access: {
-                                viewOnly:[],
-                                create: [],
-                                approve: [],
-                                pay: [],
-                            },
-                            management: []
-                        }
-                    }
-                },
+                isFormDisabled: false,
+                checkedAllCompanies: false,
                 activeStep: 1,
                 steps: [
                     {
@@ -89,11 +72,54 @@
                 ]
             }
         },
-        components:{InviteUserMainInfo, InviteUserAvailableLocations, InviteUserRoles},
+        components:{
+            InviteUserMainInfo, 
+            InviteUserAvailableLocations, 
+            InviteUserRoles
+        },
         methods:{
             changeStep(num){
                 this.activeStep = num;
+                
+            },
+            ...mapMutations({
+                setMainInfoAllCompanies: 'SET_MAININFO_ACTIVEALLCOMPANIES',
+            }),
+            nextStep(){
+                if(this.activeStep < 3){
+                    this.activeStep += 1;
+                }
+                else if(this.activeStep == 3){
+                    this.submitForm();
+                }
+                else{
+                    console.log("+");
+                }
+            },
+            submitForm(){
+                this.isFormDisabled = true;
+                this.activeStep =4;
+                try {
+                    console.log(JSON.stringify(this.getUser))
+                } catch (error) {
+                    console.error(error);
+                } finally{
+                    setTimeout(() => {
+                        this.activeStep = 3;
+                        this.isFormDisabled = false;
+                    }, 2000);
+                }
             }
+        },
+        computed: {
+            ...mapGetters([
+            'getMainInfoActiveAllCompanies',
+            'getUser'
+            ]),
+            
+        },
+        mounted(){
+            this.checkedAllCompanies = this.getMainInfoActiveAllCompanies;
         }
     }
 </script>
@@ -102,36 +128,53 @@
     .invite-user{
         padding: 24px;
         max-width: 1000px;
+        margin: auto;
+
         background-color: $color-white;
         box-shadow: 0px 8px 16px rgba(#363E71, 0.24);
         border-radius: 16px;
+        @media screen and (max-width: 400px) { 
+            padding: 10px;
+        }
         .invite-user__header{
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             gap: 14px;
             padding: 0 24px;
             margin: 0 -24px;
             
             border-bottom: 1px solid rgba($color-black, 0.1);
+            @media screen and (max-width: 600px) { 
+                margin: 0 -10px;
+                padding: 0 10px;
+            }
             .header__top{
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+               
                 .top__label{
                     font-weight: 600;
                     font-size: 24px;
                     
                 }
+                .top__close{
+                    cursor: pointer;
+                }
             }
+            
             .header__steps {
                 display: flex;
                 gap: 24px;
+                @media screen and (max-width: 510px) { 
+                    overflow-x: auto;
+                }
                 .steps__step{
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     gap: 8px;
-
                     cursor: pointer;
                     padding-bottom: 18px;
                     .step__icon{
@@ -152,6 +195,9 @@
                         align-items: center;
                         color: rgba($color-navy-blue, 0.5);
                         font-weight: 500;
+                        @media screen and (max-width: 510px) { 
+                            width: max-content;
+                        }
                     }
                     &.active{
                         border-bottom: 2px solid $color-blue;
@@ -177,6 +223,7 @@
         }
         .invite-user__content{
             padding: 24px 0px 32px;
+            
         }
         .invite-user__footer{
             display: flex;
@@ -185,13 +232,24 @@
             margin: 0 -24px;
             padding-top: 20px;
             border-top: 1px solid rgba($color-black, 0.1);
+            @media screen and (max-width: 400px) { 
+                margin: 0 -10px;
+                padding: 10px;
+            }
             .v-button{
                 margin-left: auto;
               
             }
-            .v-toggle-switch{
+            .h-toggle-switch{
                 .icon-info{
                     margin-left: 8px;
+                }
+            }
+            @media screen and (max-width: 470px) {
+                flex-direction: column;
+                gap: 20px;
+                .nextStep{
+                    width: 100%;
                 }
             }
         }

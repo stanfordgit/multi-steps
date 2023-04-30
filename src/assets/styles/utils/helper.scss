@@ -1,0 +1,112 @@
+.h-checkbox{
+    font-weight: 500;
+    width: max-content;
+    
+    .checkbox{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 8px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        input{
+            display: none;
+            height: 0;
+            width: 0;
+            &:checked ~ .checkmark {
+                background-color: $color-blue;
+                &::after{
+                    display: block;
+                }
+            }
+            &:disabled {
+                ~ .label{
+                    color: rgba($color-grey, 0.5);
+                }
+                ~.checkmark{
+                    background-color: rgba($color-grey, 0.1);
+                }
+               
+            }
+
+        }
+        .checkmark{
+            position: relative;
+            height: 18px;
+            width: 18px;
+            border-radius: 4px;
+            background-color: $color-white;
+            border: 1px solid $color-night-blue;
+            &::after{
+                position: absolute;
+                display: none;
+                left: 3px;
+                top: -6px;
+                content: url(@/assets/images/checkbox-mark.svg);
+            }
+        }
+        .label{
+            
+        }
+    }
+}
+.h-toggle-switch{
+    .toggle-switch{
+        display: flex;
+        align-items: center;
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            &:checked + .slider {
+                background-color: $color-blue;
+                &::before{
+                    -webkit-transform: translateX(20px);
+                    -ms-transform: translateX(20px);
+                    transform: translateX(20px);
+                }
+            }
+            &:disabled + .slider{
+                background-color: rgba($color-grey, 0.1);
+                &::before{
+                    background-color: rgba($color-grey, 0.3);
+                }
+            }
+
+        }
+        .slider {
+            position: relative;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 44px;
+            height: 24px;
+            bottom: 0;
+            border-radius: 12px;
+            background-color: rgba($color-blue, 0.2);
+            -webkit-transition: .4s;
+            transition: .4s;
+            &::before{
+                position: absolute;
+                content: "";
+                height: 20px;
+                width: 20px;
+                left: 2px;
+                bottom: 2px;
+                border-radius: 50%;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+        }
+        .label{
+            display: flex;
+            flex-direction: row;
+            margin-left: 8px;
+            font-size: 16px;
+        }
+    }
+}

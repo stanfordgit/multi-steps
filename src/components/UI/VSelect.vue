@@ -1,8 +1,8 @@
 <template>
     <div class="v-select">
         <VFieldLabel :required="required">{{label}}</VFieldLabel>
-        <select v-model="activeSelected">
-            <option v-for="option in options" :key="option.id">{{option.label}}</option>
+        <select v-model="selectedOption" :disabled="disabled">
+            <option v-for="option in options" :key="option.id" :value="option.value">{{option.label}}</option>
         </select>
     </div>
 </template>
@@ -11,10 +11,9 @@
     import VFieldLabel from './VFieldLabel';
     export default {
         name: 'VSelect',
-   
-        data(){
-            return{
-                activeSelected: '',
+        computed:{
+            selectedOption(){
+                return this.value
             }
         },
         components: { VFieldLabel },
@@ -31,6 +30,14 @@
                 type: Array,
                 default: () => [],
                 required: true,
+            },
+            value: {
+                type: String,
+                default: ''
+            },
+            disabled: {
+                type: Boolean,
+                default: false,
             }
         }
     }
@@ -64,6 +71,12 @@
         option{
             font-weight: 500;
             color: $color-navy-blue;
+        }
+        &:disabled{
+            background-color: rgba(#ebebeb, 0.5);
+
+            color: rgba($color-grey, 0.5);
+            cursor: not-allowed;
         }
     }
 }

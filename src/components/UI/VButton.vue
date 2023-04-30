@@ -1,5 +1,5 @@
 <template>
-    <button class="v-button">
+    <button class="v-button" :disabled="disabled">
        <slot/>
     </button>
 </template>
@@ -12,6 +12,10 @@
                 type: String,
                 default: null,
             },
+            disabled: {
+                type: Boolean,
+                default: false
+            }
         },
     }
 </script>
@@ -26,5 +30,10 @@
         font-weight: 600;
         background-color: #1D2452;
         cursor: pointer;
+        &:disabled{
+            color: rgba($color-grey, 0.5);
+            cursor: not-allowed;
+            background-color: rgba($color-grey, 0.1);
+        }
     }
 </style>

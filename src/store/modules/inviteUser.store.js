@@ -9,11 +9,11 @@ export default {
             emailAddress: '',
             phoneNumber: '',
             position: '',
-            availableInCompany: '',
+            availableInCompany: 'precoro',
             activeAllCompanies: false,
         },
         availableLocations:{
-            mainLocation: '',
+            mainLocation: 'mainPrecoroUS',
             locationAll: false,
             locations: []
         },
@@ -29,6 +29,9 @@ export default {
     }
   },
   getters: {
+    getUser(state){
+        return state.user;
+    },
     //MainInfo
     getMainInfoFirstName(state){
         return state.user.mainInfo.firstName;
@@ -48,7 +51,7 @@ export default {
     getMainInfoAvailableInCompany(state){
         return state.user.mainInfo.availableInCompany;
     },
-    getActiveAllCompanies(state){
+    getMainInfoActiveAllCompanies(state){
         return state.user.mainInfo.activeAllCompanies;
     },
     //availableLocations
@@ -100,23 +103,26 @@ export default {
         state.user.availableLocations.locationAll = payload;
     },
     SET_AVAILABLELOCATIONS_LOCATIONS(state, payload) {
-        state.user.availableLocations.locations = payload;
+        state.user.availableLocations.locations = [...payload];
     },
     //roles
     SET_ROLES_ACCESS_VIEWONLY(state, payload){
-        state.user.roles.access.viewOnly = payload;
+        state.user.roles.access.viewOnly = [ ...payload ];
     },
     SET_ROLES_ACCESS_CREATE(state, payload){
-        state.user.roles.access.create = payload;
+        state.user.roles.access.create = [ ...payload ];
     },
     SET_ROLES_ACCESS_APPROVE(state, payload){
-        state.user.roles.access.approve = payload;
+        state.user.roles.access.approve = [ ...payload ];
     },
     SET_ROLES_ACCESS_PAY(state, payload){
-        state.user.roles.access.pay = payload;
+        state.user.roles.access.pay = [ ...payload ];
     },
-    SET_ROLES_ACCESS_MANAGEMENT(state, payload){
-        state.user.roles.management = payload;
+    SET_ROLES_ACCESS(state, payload){
+        state.user.roles.access = { ...payload };
+    },
+    SET_ROLES_MANAGEMENT(state, payload){
+        state.user.roles.management = [...payload];
     },
   },
 }

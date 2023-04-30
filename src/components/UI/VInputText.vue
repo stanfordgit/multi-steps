@@ -1,7 +1,7 @@
 <template>
     <div class="v-input-text">
         <VFieldLabel :required="required">{{label}}</VFieldLabel>
-        <input type="text" :name="name" :required="required" :value="value">
+        <input type="text" :name="name" :required="required" :value="value" :disabled="disabled">
     </div>
 </template>
 
@@ -26,6 +26,10 @@ import VFieldLabel from './VFieldLabel';
             required:{
                 type: Boolean,
                 default: false
+            },
+            disabled:{
+                type: Boolean,
+                default: false,
             }
         }
     }
@@ -45,6 +49,10 @@ import VFieldLabel from './VFieldLabel';
         &:focus{
             outline: none !important;
             border: 1px solid $color-blue;
+        }
+        &:disabled{
+            background-color: rgba(#ebebeb, 0.4);
+            cursor: not-allowed;
         }
     }
 }

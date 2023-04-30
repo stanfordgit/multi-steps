@@ -1,11 +1,11 @@
 <template>
     <div class="invite-user__main-info">
-        <v-input-text label="First Name" name="firstName" :value="getMainInfoFirstName" @input="setFirstName($event.target.value)"/>
-        <v-input-text label="Last Name" name="lastName" :value="getMainInfoLastName" @input="setLastName($event.target.value)"/>
-        <v-input-text label="Email Address" name="emailAddress" :value="getMainInfoEmailAddress" @input="setEmailAddress($event.target.value)"/>
-        <v-input-text label="Phone Number" name="phoneNumber" :value="getMainInfoPhoneNumber" @input="setPhoneNumber($event.target.value)"/>
-        <v-input-text label="Position" name="position" :value="getMainInfoPosition" @input="setPosition($event.target.value)"/>
-        <v-select label="Available in company" :options="company" :value="getMainInfoAvailableInCompany" @input="setAvailableInCompany($event.target.value)"/>
+        <v-input-text label="First Name" name="firstName" :disabled="formDisabled" :value="getMainInfoFirstName" @input="setFirstName($event.target.value)"/>
+        <v-input-text label="Last Name" name="lastName" :disabled="formDisabled" :value="getMainInfoLastName" @input="setLastName($event.target.value)"/>
+        <v-input-text label="Email Address" name="emailAddress" :disabled="formDisabled" :value="getMainInfoEmailAddress" @input="setEmailAddress($event.target.value)"/>
+        <v-input-text label="Phone Number" name="phoneNumber" :disabled="formDisabled" :value="getMainInfoPhoneNumber" @input="setPhoneNumber($event.target.value)"/>
+        <v-input-text label="Position" name="position" :disabled="formDisabled" :value="getMainInfoPosition" @input="setPosition($event.target.value)"/>
+        <v-select label="Available in company" :disabled="formDisabled" :options="company" :value="getMainInfoAvailableInCompany" @input="setAvailableInCompany($event.target.value)"/>
     </div>
 </template>
 
@@ -30,34 +30,10 @@ import { mapMutations, mapGetters } from 'vuex'
             }
         },
         props:{
-            firstName: {
-                type: String,
-                default: '',
-            },
-            lastName:{   
-                type: String,
-                default: '',
-            },
-            emailAddress:{   
-                type: String,
-                default: '',
-            },
-            phoneNumber:{   
-                type: String,
-                default: '',
-            },
-            position:{   
-                type: String,
-                default: '',
-            },
-            availableInCompany:{   
-                type: String,
-                default: '',
-            },
-            activeAllCompanies:{
+            formDisabled: {
                 type: Boolean,
                 default: false,
-            }
+            },
         },
         computed: {
             ...mapGetters([
@@ -67,7 +43,8 @@ import { mapMutations, mapGetters } from 'vuex'
             'getMainInfoPhoneNumber',
             'getMainInfoPosition',
             'getMainInfoAvailableInCompany'
-            ])
+            ]),
+            
         },
         methods: {
             ...mapMutations({
@@ -89,6 +66,9 @@ import { mapMutations, mapGetters } from 'vuex'
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 20px;
     grid-row-gap: 20px;
+    @media screen and (max-width: 600px) { 
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 </style>
